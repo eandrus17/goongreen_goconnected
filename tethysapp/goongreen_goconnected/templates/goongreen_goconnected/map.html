@@ -8,14 +8,149 @@
 {% endblock %}
 
 {% block app_content %}
-  <h1>Welcome to your Tethys App!</h1>
-  <p>Take advantage of beautiful typography to organize the content of your app:</p>
-  <h1>Heading 1</h1>
-  <h2>Heading 2</h2>
-  <h3>Heading 3</h3>
-  <h4>Heading 4</h4>
-  <h5>Heading 5</h5>
-  <h6>Heading 6</h6>
+
+
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
+<script src="https://js.arcgis.com/4.6/"></script>
+
+
+<script>
+require([
+  "esri/Map",
+  "esri/layers/GraphicsLayer",
+  "esri/Graphic",
+  // "esri/geometry/Point",
+  "esri/tasks/Geoprocessor",
+  // "esri/tasks/support/LinearUnit",
+  "esri/tasks/support/FeatureSet",
+  "esri/views/MapView",
+  "dojo/domReady!"
+], function(Map, GraphicsLayer, Graphic, Geoprocessor, FeatureSet, MapView){
+
+	//a map with basemap
+	var map = new Map({
+    basemap: "streets"
+	});
+
+    //a graphics layer to show input data and output polygon
+    var graphicsLayer = new GraphicsLayer();
+    map.add(graphicsLayer);
+
+    var view = new MapView({
+    container: "viewDiv",
+    map: map,
+	center: [-111.9, 40.75],
+	zoom: 8
+    });
+
+	// symbol for polygons
+    var fillSymbol = {
+          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          color: [226, 119, 40, 0.75],
+          outline: { // autocasts as new SimpleLineSymbol()
+            color: [255, 255, 255],
+            width: 1
+          }
+        };
+
+	// Geoprocessing service url
+	var gpUrl = "http://geoserver2.byu.edu/arcgis/rest/services/GoConnected/FindElevChange/GPServer/FindElevChange";
+
+    // create a new Geoprocessor
+	var gp = new Geoprocessor(gpUrl);
+	// define output spatial reference
+    gp.outSpatialReference = { // autocasts as new SpatialReference()
+          wkid: 102100 //EPSG3857
+        };
+
+	//main function
+	runmytool();
+
+    function runmytool(event) {
+
+          // var loading_symbol = document.getElementById("loading");
+          // loading_symbol.innerHTML = <image src="../../../static/goongreen_goconnected/images/loading-1.gif"/>
+
+
+		  // input parameters
+         var cityname = document.getElementById("cityname").value;
+         var params = {
+            "Expression": cityname,
+          };
+          gp.submitJob(params).then(completeCallback, errBack, statusCallback);
+    }
+
+	function completeCallback(result){
+
+        gp.getResultData(result.jobId, "result_poly").then(drawResult, drawResultErrBack);
+
+	}
+
+	function drawResult(data){
+
+        alert("draw result");
+	    var polygon_feature = data.value.features[0];
+
+        g = data.value.features[0].attributes['gridcode'];
+
+        alert(g);
+
+        var range_val = document.getElementById("Range");
+          range_val.innerText = "Maximum change in elevation: " + g + " ft";
+
+
+		polygon_feature.symbol = fillSymbol;
+		graphicsLayer.add(polygon_feature);
+	}
+
+	function drawResultErrBack(err) {
+        console.log("draw result error: ", err);
+    }
+
+	function statusCallback(data) {
+        console.log(data.jobStatus);
+    }
+    function errBack(err) {
+        console.log("gp error: ", err);
+    }
+    loading_symbol.innerHTML = ""
+});
+</script>
+
+
+  <h1>Find Elevation Change</h1>
+<form>
+  <!-- <select id="cityname">
+    <option disable selected value> --- Select a City --- </option>
+    <option>South Jordan</option>
+    <option>Draper</option>
+    <option>Orem</option>
+  </select> -->
+  <input type="text" id="cityname"/>
+
+</form>
+  <input type="button" name="submit" value="Submit" onclick="runmytool();"/>
+
+
+<label id="Range"></label>
+
+<div id="loading"></div>
+
+<style>
+  #viewDiv {
+    padding: 0;
+    margin: 0;
+    height: 600px;
+    width: 900px
+  }
+</style>
+
+
+
+<div id="viewDiv"></div>
+
+
 {% endblock %}
 
 {# Use the after_app_content block for modals #}
