@@ -89,12 +89,10 @@ require([
 
 	function drawResult(data){
 
-        alert("draw result");
+
 	    var polygon_feature = data.value.features[0];
 
         g = data.value.features[0].attributes['gridcode'];
-
-        alert(g);
 
         var range_val = document.getElementById("Range");
           range_val.innerText = "Maximum change in elevation: " + g + " ft";
