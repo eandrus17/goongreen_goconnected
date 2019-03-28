@@ -9,8 +9,6 @@
 
 {% block app_content %}
 
-
-
 <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
 <script src="https://js.arcgis.com/4.6/"></script>
 
@@ -64,6 +62,7 @@ require([
           wkid: 102100 //EPSG3857
         };
 
+	// runs the tool on the button click (jQuery)
 	$("#submit").click(function () {
 	  runmytool();
 	});
@@ -71,11 +70,8 @@ require([
 	//main function
 
     function runmytool(event) {
-
-          // var loading_symbol = document.getElementById("loading");
-          // loading_symbol.innerHTML = <image src="../../../static/goongreen_goconnected/images/loading-1.gif"/>
+         //loading symbol, grabbed from web
           $("#loading").html('<image src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
-
 
 		  // input parameters
          var cityname = document.getElementById("cityname").value;
@@ -133,7 +129,6 @@ require([
 </form>
   <input type="button" id="submit" value="Submit"/>
 
-
 <label id="Range"></label>
 
 <div id="loading"></div>
@@ -146,8 +141,6 @@ require([
     width: 900px
   }
 </style>
-
-
 
 <div id="viewDiv"></div>
 
@@ -179,9 +172,4 @@ require([
 {% endblock %}
 
 {% block app_actions %}
-  {% gizmo save_button %}
-  {% gizmo edit_button %}
-  {% gizmo remove_button %}
-  {% gizmo previous_button %}
-  {% gizmo next_button %}
 {% endblock %}
