@@ -64,13 +64,17 @@ require([
           wkid: 102100 //EPSG3857
         };
 
+	$("#submit").click(function () {
+	  runmytool();
+	});
+
 	//main function
-	runmytool();
 
     function runmytool(event) {
 
           // var loading_symbol = document.getElementById("loading");
           // loading_symbol.innerHTML = <image src="../../../static/goongreen_goconnected/images/loading-1.gif"/>
+          $("#loading").html('<image src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
 
 
 		  // input parameters
@@ -88,8 +92,7 @@ require([
 	}
 
 	function drawResult(data){
-
-
+	    $("#loading").html('');
 	    var polygon_feature = data.value.features[0];
 
         g = data.value.features[0].attributes['gridcode'];
@@ -112,7 +115,7 @@ require([
     function errBack(err) {
         console.log("gp error: ", err);
     }
-    loading_symbol.innerHTML = ""
+
 });
 </script>
 
@@ -128,7 +131,7 @@ require([
   <input type="text" id="cityname"/>
 
 </form>
-  <input type="button" name="submit" value="Submit" onclick="runmytool();"/>
+  <input type="button" id="submit" value="Submit"/>
 
 
 <label id="Range"></label>
