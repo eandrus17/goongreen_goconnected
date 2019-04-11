@@ -61,14 +61,12 @@ require([
 
 	// runs the tool on the button click (jQuery)
 	$("#submit").click(function () {
-	  runmytool1();
-	  runmytool2();
-	  runmytool3();
+	  runmytool();
 	});
 
 	//main function
 
-    function runmytool1(event) {
+    function runmytool(event) {
          //loading symbol, grabbed from web
           $("#loading").html('<img src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
 
@@ -94,28 +92,21 @@ require([
 	}
 
 	function drawResult(data){
-	    var polygon_feature = data.value.features[0];
-
         g = data.value.features[0].attributes['gridcode'];
+        $("#Range").html("Maximum change in elevation: " + g + " ft");
 
-        var range_val = document.getElementById("Range");
-          range_val.innerText = "Maximum change in elevation: " + g + " ft";
-
-
-		polygon_feature.symbol = fillSymbol;
+        var polygon_feature = data.value.features[0];
+        polygon_feature.symbol = fillSymbol;
 		graphicsLayer.add(polygon_feature);
 	}
 
     function drawResult2(data){
-	    var polygon_feature2 = data.value.features[0];
+        g = data.value.features[0].attributes['gridcode'];
+        $("#IntDen").html("Intersections per square mile: " + g);
 
-        g2 = data.value.features[0].attributes['gridcode'];
-
-        var intdens = document.getElementById("IntDen");
-          intdens.innerText = "Intersections per square mile: " + g2;
-
-		polygon_feature2.symbol = fillSymbol;
-		//graphicsLayer2.add(polygon_feature2);
+	    var polygon_feature = data.value.features[0];
+		polygon_feature.symbol = fillSymbol;
+		//graphicsLayer.add(polygon_feature);
 	}
 
     function drawResult3(data){
