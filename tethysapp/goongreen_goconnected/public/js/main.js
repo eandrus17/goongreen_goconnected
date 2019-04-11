@@ -88,7 +88,7 @@ require([
         gp2.getResultData(result.jobId, "output_poly_shp").then(drawResult2, drawResultErrBack);
 	}
 	function completeCallback3(result){
-        gp3.getResultData(result.jobId, "Row_Count").then(drawResult3, drawResultErrBack);
+        gp3.getResultData(result.jobId, "BusStops_Clip").then(drawResult3, drawResultErrBack);
 	}
 
 	function drawResult(data){
@@ -111,13 +111,11 @@ require([
 
     function drawResult3(data){
 	    $("#loading").html('');
-	    alert("in Drawresults3");
 	    //var polygon_feature3 = data.value.features[0];
-	    alert("hello");
-        g3 = data.value.features[0];
-        alert("hi there");
+        g = data.value.features.length;
+        //g = data.value.features[0].attributes['stopid'];
         var busstops = document.getElementById("Buses");
-          busstops.innerText = "Number of Bus Stops in " + cityname3 + ": " + g3;
+          busstops.innerText = "Number of Bus Stops: " + g;
 
 		//polygon_feature3.symbol = fillSymbol;
 		//graphicsLayer3.add(polygon_feature3);
