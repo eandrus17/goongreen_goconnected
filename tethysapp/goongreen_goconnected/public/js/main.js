@@ -71,7 +71,7 @@ require([
           $("#loading").html('<img src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
 
 		  // input parameters
-         //var cityname = '"NAME" = ' + "'" + $("#cityname").val() + "'";
+         var cityname = '"NAME" = ' + "'" + $("#cityname").val() + "'";
          var cityname = document.getElementById("cityname").value;
          var params = {
             "Expression": cityname
