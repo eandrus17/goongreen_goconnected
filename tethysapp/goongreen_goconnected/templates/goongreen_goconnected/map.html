@@ -11,7 +11,7 @@
 
 <link rel="stylesheet" href="https://js.arcgis.com/4.6/esri/css/main.css">
 <script src="https://js.arcgis.com/4.6/"></script>
-
+<script type="text/javascript" src="html2canvas.js"></script>
 
   <h1>Calculate Connectivity</h1>
 <form>
@@ -22,6 +22,53 @@
     <option>Orem</option>
   </select> -->
   <input type="text" id="cityname"/>
+
+  <div>
+<h3><label id="fromlabel">Select City:</label></h3>
+<select id="cityname">
+    <option id="Alpine">Alpine</option>
+    <option id="Alta">Alta</option>
+    <option id="American Fork">American Fork</option>
+    <option id="Bluffdale">Bluffdale</option>
+    <option id="Cedar Fort">Cedar Fort</option>
+    <option id="Cedar Hills">Cedar Hills</option>
+    <option id="Cottonwood Heights">Cottonwood Heights</option>
+    <option id="Draper">Draper</option>
+    <option id="Eagle Mountain">Eagle Mountain</option>
+    <option id="Elk Ridge">Elk Ridge</option>
+    <option id="Fairfield">Fairfield</option>
+    <option id="Genola">Genola</option>
+    <option id="Herriman">Herriman</option>
+    <option id="Highland">Highland</option>
+    <option id="Holladay">Holladay</option>
+    <option id="Lehi">Lehi</option>
+    <option id="Lindon">Lindon</option>
+    <option id="Mapleton">Mapleton</option>
+    <option id="Midvale">Midvale</option>
+    <option id="Millcreek">Millcreek</option>
+    <option id="Murray">Murray</option>
+    <option id="Orem">Orem</option>
+    <option id="Payson">Payson</option>
+    <option id="Pleasant Grove">Pleasant Grove</option>
+    <option id="Provo">Provo</option>
+    <option id="Riverton">Riverton</option>
+    <option id="Salem">Salem</option>
+    <option id="Salt Lake City">Salt Lake City</option>
+    <option id="Sandy">Sandy</option>
+    <option id="Santaquin">Santaquin</option>
+    <option id="Saratoga Springs">Saratoga Springs</option>
+    <option id="South Jordan">South Jordan</option>
+    <option id="South Salt Lake">South Salt Lake</option>
+    <option id="Spanish Fork">Spanish Fork</option>
+    <option id="Springville">Springville</option>
+    <option id="Taylorsville">Taylorsville</option>
+    <option id="Vineyard">Vineyard</option>
+    <option id="West Jordan">West Jordan</option>
+    <option id="West Vally City">West Vally City</option>
+    <option id="Woodland Hills">Woodland Hills</option>
+
+  </select>
+</div>
 
 </form>
   <input type="button" id="submit" value="Submit"/>
@@ -45,6 +92,11 @@
 
 <div id="viewDiv"></div>
 
+<br>
+<br>
+
+<!--Open Modal for Results Page -->
+<button id="resultsBtn" data-toggle="modal" data-target="#resultsModal"> Show me the $$$</button>
 
 {% endblock %}
 
@@ -71,6 +123,30 @@
       </div>
     </div>
   </div>
+
+<div id="resultsModal" class="modal"/>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+
+      </button>
+      <h2>Results Page</h2>
+    </div>
+    <div class="modal-body">
+      <p id="CityDisplayName"></p>
+      <div id="viewDiv"></div>
+      <p id="ConnScore"></p>
+      <p>Individual Scores:</p>
+      <p id="ElevScore"></p>
+      <p id="IntScore"></p>
+      <p id="BusScore"></p>
+
+      <!--Export to PDF-->
+      <button id="exportBtn">Export to PDF</button>
+
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block app_actions %}
