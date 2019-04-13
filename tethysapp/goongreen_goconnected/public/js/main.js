@@ -72,7 +72,7 @@ require([
 
 		  // input parameters
          var cityname = '"NAME" = ' + "'" + $("#cityname").val() + "'";
-         var cityname = document.getElementById("cityname").value;
+        // var cityname = document.getElementById("cityname").value;
          var params = {
             "Expression": cityname
           };
