@@ -21,7 +21,9 @@ $(document).ready(function() {
       //"esri/tasks/support/LinearUnit",
       "esri/tasks/support/FeatureSet",
       "esri/views/MapView",
+      "esri/geometry/Extent",
       "dojo/domReady!"
+
     ], function(Map, GraphicsLayer, Graphic, Geoprocessor, FeatureSet, MapView){
 
         //a map with basemap
@@ -29,15 +31,29 @@ $(document).ready(function() {
         basemap: "streets"
         });
 
-        //a graphics layer to show input data and output polygon
-        graphicsLayer = new GraphicsLayer();
-        map.add(graphicsLayer);
+        var ModalMap = new Map({
+        basemap: "streets"
+        });
 
-        view = new MapView({
+        //a graphics layer to show input data and output polygon
+        graphicsLayermain = new GraphicsLayer();
+        graphicsLayermodal = new GraphicsLayer();
+        map.add(graphicsLayermain);
+        map.add(graphicsLayermodal);
+
+        viewmain = new MapView({
         container: "viewDiv",
         map: map,
         center: [-111.9, 40.75],
         zoom: 8
+        });
+
+        viewmodal = new MapView({
+        container: "modalMap",
+        map: ModalMap,
+        center: [-111.9, 40.75],
+        zoom: 8
+
         });
 
 
@@ -95,7 +111,8 @@ $(document).ready(function() {
 
               //loading symbol, grabbed from web
               $("#loading").html('<img src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
-              graphicsLayer.removeAll();
+              graphicsLayermain.removeAll();
+              graphicsLayermodal.removeAll();
 
 
               // input parameters
@@ -130,11 +147,10 @@ $(document).ready(function() {
 
                 var polygon_feature = data.value.features[i];
                 polygon_feature.symbol = fillSymbol;
-                graphicsLayer.add(polygon_feature);
-                }
+                graphicsLayermain.add(polygon_feature);
+                graphicsLayermodal.add(polygon_feature);
 
-    //     counter = counter + 1;
-    //     removeLoadingSpinnerIfDone(counter);
+                }
         }
 
 
@@ -155,7 +171,8 @@ $(document).ready(function() {
 
                 var polygon_feature = data.value.features[i];
                 polygon_feature.symbol = markerSymbol;
-                graphicsLayer.add(polygon_feature);
+                graphicsLayermain.add(polygon_feature);
+                graphicsLayermodal.add(polygon_feature);
                 }
         }
 
