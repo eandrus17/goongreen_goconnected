@@ -19,16 +19,11 @@
 {% url 'goongreen_goconnected:proposal' as proposal_url %}
 {% url 'goongreen_goconnected:mockups' as mockups_url %}
 
-
-
-
  <li class="title">App Navigation</li>
  <li class="{% if request.path == home_url %}active{% endif %}"><a href="{{ home_url }}">Home</a></li>
  <li class="{% if request.path == proposal_url %}active{% endif %}"><a href="{{ proposal_url }}">Project Proposal</a></li>
  <li class="{% if request.path == mockups_url %}active{% endif %}"><a href="{{ mockups_url }}">Mockup Design</a></li>
  <li class="{% if request.path == map_url %}active{% endif %}"><a href="{{ map_url }}">Map Page</a></li>
-
-
 
 {% endblock %}
 
@@ -41,11 +36,14 @@
 {% block content_dependent_styles %}
   {{ block.super }}
   <link href="{% static 'goongreen_goconnected/css/main.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.10/esri/css/main.css">
+
 {% endblock %}
 
 {% block scripts %}
   {{ block.super }}
-  <script src="{% static 'goongreen_goconnected/js/main.js' %}" type="text/javascript"></script>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js" type="text/javascript"></script>
+    <script src="https://js.arcgis.com/4.11/"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js" type="text/javascript"></script>
+    <script src="{% static 'goongreen_goconnected/js/main.js' %}" type="text/javascript"></script>
 {% endblock %}
