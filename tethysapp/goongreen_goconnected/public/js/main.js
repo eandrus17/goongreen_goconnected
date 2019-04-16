@@ -7,15 +7,15 @@ var connscore
 var elevscore
 var intscore
 var busscore
-var CityDisplayName
+var displaycityname
 
 require([
   "esri/Map",
   "esri/layers/GraphicsLayer",
   "esri/Graphic",
-  // "esri/geometry/Point",
+  //"esri/geometry/Point",
   "esri/tasks/Geoprocessor",
-  // "esri/tasks/support/LinearUnit",
+  //"esri/tasks/support/LinearUnit",
   "esri/tasks/support/FeatureSet",
   "esri/views/MapView",
   "dojo/domReady!"
@@ -98,9 +98,11 @@ require([
          var params = {
             "Expression": cityname
           };
-          gp1.submitJob(params).then(completeCallback1, errBack, statusCallback);
-          gp2.submitJob(params).then(completeCallback2, errBack, statusCallback);
-          gp3.submitJob(params).then(completeCallback3, errBack, statusCallback);
+          Promise.all([
+            gp1.submitJob(params).then(completeCallback1, errBack),
+            gp2.submitJob(params).then(completeCallback2, errBack),
+            gp3.submitJob(params).then(completeCallback3, errBack),
+          ]).then($("#loading").html(''), errBack);
     }
 
 	function completeCallback1(result){
@@ -112,9 +114,6 @@ require([
 	function completeCallback3(result){
         gp3.getResultData(result.jobId, "BusStops_Clip").then(drawResult3, drawResultErrBack);
 	}
-
-    var counter
-    counter = 0
 
 	function drawResult(data){
 
@@ -129,7 +128,8 @@ require([
 		    graphicsLayer.add(polygon_feature);
 		    }
 
-     counter = counter + 1
+//     counter = counter + 1;
+//     removeLoadingSpinnerIfDone(counter);
 	}
 
 
@@ -137,8 +137,6 @@ require([
     function drawResult2(data){
         g2 = data.value.features[0].attributes['gridcode'];
         $("#IntDen").html("Intersections per square mile: " + g2);
-
-    counter = counter + 1
 	}
 
 
@@ -154,8 +152,6 @@ require([
 		    polygon_feature.symbol = markerSymbol;
 		    graphicsLayer.add(polygon_feature);
 		    }
-
-    counter = counter + 1
 	}
 
 
@@ -164,14 +160,8 @@ require([
         console.log("draw result error: ", err);
     }
 
-	function statusCallback(data) {
-        console.log(data.jobStatus);
-        if (counter == 3) {
-            $("#loading").html('');
-        }
-    }
     function errBack(err) {
-        console.log("gp1 error: ", err);
+        console.log("gp error: ", err);
     }
 
 });
@@ -244,7 +234,8 @@ function Connectivity(Score) {
       var HiMidLo = "High";
       break;
   }
-
+    displaycityname = document.getElementById("DisplayCityName");
+    displaycityname.innerText = "Connectivity for " + document.getElementById("cityname").value + ", Utah"
     connscore = document.getElementById("ConnScore");
     connscore.innerText = "Total Connectivity Score: " + HiMidLo;
     elevscore = document.getElementById("ElevScore");
