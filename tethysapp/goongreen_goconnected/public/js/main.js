@@ -31,15 +31,16 @@ $(document).ready(function() {
         basemap: "streets"
         });
 
-        var ModalMap = new Map({
+        /* var ModalMap = new Map({
         basemap: "streets"
         });
+        */
 
         //a graphics layer to show input data and output polygon
         graphicsLayermain = new GraphicsLayer();
-        graphicsLayermodal = new GraphicsLayer();
+        //graphicsLayermodal = new GraphicsLayer();
         map.add(graphicsLayermain);
-        map.add(graphicsLayermodal);
+        //map.add(graphicsLayermodal);
 
         viewmain = new MapView({
         container: "viewDiv",
@@ -48,13 +49,14 @@ $(document).ready(function() {
         zoom: 8
         });
 
-        viewmodal = new MapView({
+        /*viewmodal = new MapView({
         container: "modalMap",
         map: ModalMap,
         center: [-111.9, 40.75],
         zoom: 8
 
         });
+        */
 
 
         // symbol for polygons
@@ -112,7 +114,7 @@ $(document).ready(function() {
               //loading symbol, grabbed from web
               $("#loading").html('<img src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
               graphicsLayermain.removeAll();
-              graphicsLayermodal.removeAll();
+              //graphicsLayermodal.removeAll();
 
 
               // input parameters
@@ -148,7 +150,7 @@ $(document).ready(function() {
                 var polygon_feature = data.value.features[i];
                 polygon_feature.symbol = fillSymbol;
                 graphicsLayermain.add(polygon_feature);
-                graphicsLayermodal.add(polygon_feature);
+                //graphicsLayermodal.add(polygon_feature);
 
                 }
         }
@@ -172,7 +174,7 @@ $(document).ready(function() {
                 var polygon_feature = data.value.features[i];
                 polygon_feature.symbol = markerSymbol;
                 graphicsLayermain.add(polygon_feature);
-                graphicsLayermodal.add(polygon_feature);
+                //graphicsLayermodal.add(polygon_feature);
                 }
         }
 
