@@ -5,9 +5,7 @@
   <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
     <a data-toggle="modal" data-target="#help-modal"><span class="glyphicon glyphicon-question-sign"></span></a>
   </div>
-  <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
-    <a data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-asterisk"></span></a>
-  </div>
+
 {% endblock %}
 
 {% block app_content %}
@@ -15,10 +13,11 @@
   <p>Created by team Go On Green (Camille Lunt, Emily Andrus, and Bruce Wang)</p>
   <h2>Instructions:</h2>
   <p>1. Go to the Map page</p>
-  <p>2. Enter in the city name. **IMPORTANT: You must use the following syntax: "NAME" = 'insertcitynamehere'</p>
+  <p>2. Select a city name from the drop-down list. </p>
   <p>3. Click Submit</p>
-  <p>Tip: If you have entered your city name, have clicked submit, and still haven't gotten results, refresh the page and wait a minute. Your maximum elevation change will appear soon.</p>
-  <p>Note: We have not gotten our loading symbol to work quite yet. The geoprocessing service takes approximately 1 full minute to run. Text will appear above the map displaying your result. </p>
+  <p>4. Three connectivity measures will appear, and the city boundaries and bus stops will show on the map.</p>
+  <p>5. Click the Show Me the $$$ button to see the Results Page.</p>
+
 
 
 {% endblock %}
@@ -34,10 +33,11 @@
           <h5 class="modal-title" id="help-modal-label">Help</h5>
         </div>
         <div class="modal-body">
-          <p>This application calculates a connectivity score for cities in Utah and Salt Lake Counties. THere are three measures used to calculate the score. The first is total elevation change in the city. To calculate the elevation change, enter the city name into box using this syntax:</p>
-          <p>"NAME" = 'cityname'</p>
-          <p>The second measure is intersection density. Intersection density is calculated using the number of intersections in the city and the area of the city in square miles (intersections/sq. mile).</p>
-          <p>To be continued...</p>
+          <p>This application calculates a connectivity rating for cities in Utah and Salt Lake Counties. There are three measures used to calculate the score: elevation change, intersection density, and number of bus stops.  </p>
+          <p>Start on the Map Page.</p>
+          <p>To calculate the elevation change, intersection density, and number of bus stops, select a city from the drop-down menu, then click Submit.</p>
+          <p>Then, to see the connectivity rating for each measure and the overall connectivity score, click the Show Me the $$$ button.</p>
+          <p>To export the Results Page to a PDF, click the Export to PDF button, and it will save as Connectivity_Results.pdf.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

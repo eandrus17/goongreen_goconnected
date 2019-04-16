@@ -1,3 +1,14 @@
+var view
+var graphicsLayer
+var g1
+var g2
+var g3
+var connscore
+var elevscore
+var intscore
+var busscore
+var CityDisplayName
+
 require([
   "esri/Map",
   "esri/layers/GraphicsLayer",
@@ -16,27 +27,38 @@ require([
 	});
 
     //a graphics layer to show input data and output polygon
-    var graphicsLayer = new GraphicsLayer();
-    //var graphicsLayer2 = new GraphicsLayer2();
+    graphicsLayer = new GraphicsLayer();
     map.add(graphicsLayer);
-    //map.add(graphicsLayer2);
 
-    var view = new MapView({
+    view = new MapView({
     container: "viewDiv",
     map: map,
 	center: [-111.9, 40.75],
 	zoom: 8
     });
 
+
 	// symbol for polygons
     var fillSymbol = {
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: [226, 119, 40, 0.75],
+          color: [255, 0, 0, 0.3],
           outline: { // autocasts as new SimpleLineSymbol()
-            color: [255, 255, 255],
+            color: [0, 0, 0],
             width: 1
           }
         };
+
+    // symbol for points
+	var markerSymbol = {
+          type: "simple-marker", // autocasts as new SimpleMarkerSymbol()
+          color: [0, 0, 0],
+          size: 8,
+          outline: { // autocasts as new SimpleLineSymbol()
+            color: [255, 255, 255],
+            width: .25
+          }
+        };
+
 
 	// Geoprocessing service url
 	var gpUrl1 = "http://geoserver2.byu.edu/arcgis/rest/services/GoConnected/FindElevChange/GPServer/FindElevChange";
@@ -64,15 +86,15 @@ require([
 	  runmytool();
 	});
 
-	//main function
+	//function to run geoprocessors
 
     function runmytool(event) {
+           graphicsLayer.removeAll();
          //loading symbol, grabbed from web
           $("#loading").html('<img src="http://baxtersonestop.com/wp-content/plugins/cars-seller-auto-classifieds-script/images/loading-1.gif" style="height: 100px"/>');
 
 		  // input parameters
          var cityname = '"NAME" = ' + "'" + $("#cityname").val() + "'";
-        // var cityname = document.getElementById("cityname").value;
          var params = {
             "Expression": cityname
           };
@@ -91,43 +113,52 @@ require([
         gp3.getResultData(result.jobId, "BusStops_Clip").then(drawResult3, drawResultErrBack);
 	}
 
-    //counter to see when all three processes have run
-    var counter;
-    counter = 0;
+    var counter
+    counter = 0
 
 	function drawResult(data){
+
         g1 = data.value.features[0].attributes['gridcode'];
         $("#Range").html("Maximum change in elevation: " + g1 + " ft");
 
-        var polygon_feature = data.value.features[0];
-        polygon_feature.symbol = fillSymbol;
-		graphicsLayer.add(polygon_feature);
+        var i = 0;
+	    for(i;i<data.value.features.length;i++){
 
-		counter = counter + 1;
+	        var polygon_feature = data.value.features[i];
+		    polygon_feature.symbol = fillSymbol;
+		    graphicsLayer.add(polygon_feature);
+		    }
+
+     counter = counter + 1
 	}
+
+
 
     function drawResult2(data){
         g2 = data.value.features[0].attributes['gridcode'];
         $("#IntDen").html("Intersections per square mile: " + g2);
 
-	    var polygon_feature = data.value.features[0];
-		polygon_feature.symbol = fillSymbol;
-		//graphicsLayer.add(polygon_feature);
-
-		counter = counter + 1;
+    counter = counter + 1
 	}
+
+
 
     function drawResult3(data){
-	    //var polygon_feature3 = data.value.features[0];
         g3 = data.value.features.length;
-        //g = data.value.features[0].attributes['stopid'];
-        var busstops = document.getElementById("Buses");
+        $("#Buses").html("Number of Bus Stops: " + g3);
 
-		//polygon_feature3.symbol = fillSymbol;
-		//graphicsLayer3.add(polygon_feature3);
+		var i = 0;
+	    for(i;i<data.value.features.length;i++){
 
-		counter = counter + 1;
+	        var polygon_feature = data.value.features[i];
+		    polygon_feature.symbol = markerSymbol;
+		    graphicsLayer.add(polygon_feature);
+		    }
+
+    counter = counter + 1
 	}
+
+
 
 	function drawResultErrBack(err) {
         console.log("draw result error: ", err);
@@ -145,21 +176,8 @@ require([
 
 });
 
-//Script for exporting to PDF from Modal
-$('#exportBtn').click(function() {
 
-  var w = document.getElementById("resultsModal").offsetWidth;
-  var h = document.getElementById("resultsModal").offsetHeight;
-  html2canvas(document.getElementById("resultsModal"), {
-    dpi: 300, // Set to 300 DPI
-    scale: 3, // Adjusts your resolution
-    onrendered: function(canvas) {
-      var img = canvas.toDataURL("image/jpeg", 1);
-      var doc = new jsPDF('L', 'px', [w, h]);
-      doc.addImage(img, 'JPEG', 0, 0, w, h);
-      doc.save('Connectivity_Results.pdf');
-    }
-  });
+// function to analyze connectivity scores (high, medium, low)
 
 function Connectivity(Score) {
   var ElevationChange;
@@ -222,24 +240,41 @@ function Connectivity(Score) {
     case (TotalScore >= 18 && TotalScore <= 22):
       var HiMidLo = "Medium";
       break;
-    case (TotalSCore >= 23 && TotalScore <= 30):
+    case (TotalScore >= 23 && TotalScore <= 30):
       var HiMidLo = "High";
       break;
   }
 
-  var connscore = document.getElementById("ConnScore");
+    connscore = document.getElementById("ConnScore");
     connscore.innerText = "Total Connectivity Score: " + HiMidLo;
-  var elevscore = document.getElementById("ElevScore");
+    elevscore = document.getElementById("ElevScore");
     elevscore.innerText = "Elevation Change Score: " + ECWscore;
-  var intscore = document.getElementById("IntScore");
+    intscore = document.getElementById("IntScore");
     intscore.innerText = "Intersection Density Score: " + IDWscore;
-  var busscore = document.getElementById("BusScore");
+    busscore = document.getElementById("BusScore");
     busscore.innerText = "Bus Stops Score: " + BSWscore;
 
-  }
+  };
 
 
 
 
 
-});
+
+//Script for exporting to PDF from Modal
+$('#exportBtn').click(function() {
+
+  var w = document.getElementById("resultsModal").offsetWidth;
+  var h = document.getElementById("resultsModal").offsetHeight;
+  html2canvas(document.getElementById("resultsModal"), {
+    dpi: 300, // Set to 300 DPI
+    scale: 3, // Adjusts your resolution
+    onrendered: function(canvas) {
+      var img = canvas.toDataURL("image/jpeg", 1);
+      var doc = new jsPDF('L', 'px', [w, h]);
+      doc.addImage(img, 'JPEG', 0, 0, w, h);
+      doc.save('Connectivity_Results.pdf');
+        }
+    });
+
+  });
